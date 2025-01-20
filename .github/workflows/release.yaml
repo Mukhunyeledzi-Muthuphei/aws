@@ -18,7 +18,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: function-zip
-          path: function.zip
+          path: ./
 
       - name: Deploy to AWS Lambda
         run: |
@@ -31,4 +31,4 @@ jobs:
 
       - name: Run integration tests
         run: |
-          pytest integration_tests/  # Assuming integration tests are in the "integration_tests" folder
+          pytest  # Assuming integration tests are in the "integration_tests" folder
