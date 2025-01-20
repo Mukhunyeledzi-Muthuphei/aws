@@ -1,0 +1,37 @@
+name: Build Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Trigger on changes to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -t package/
+
+      - name: Run unit tests
+        run: |
+          pytest  # Assuming your tests are in the "tests" folder
+
+      - name: Create deployment package
+        run: |
+          cd package && zip -r ../function.zip .
+          cd .. && zip -g function.zip lambda_function.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: function-zip
+          path: function.zip
