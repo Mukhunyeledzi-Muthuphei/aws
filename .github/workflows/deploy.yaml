@@ -1,14 +1,15 @@
 name: Deploy to AWS Lambda
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Release Pipeline"]  # Trigger when the release pipeline completes
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    needs: release
+    
 
     steps:
       - name: Checkout code
